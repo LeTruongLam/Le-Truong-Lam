@@ -12,34 +12,22 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Ibrahim Memon - Software Engineer & UI/UX Designer",
-  description: "A self-taught UI/UX designer and Software Engineer at WebHR. Creating meaningful and delightful digital products that balance user needs and business goals. 3+ years of industry experience.",
+  title: "Lê Trường Lam - Portfolio",
+  description: "",
   keywords: [
-    "Ibrahim Memon",
-    "Software Engineer",
-    "UI/UX Designer",
     "Frontend Developer",
     "React Developer",
     "Next.js Developer",
-    "Web Designer",
-    "WebHR Engineer",
     "Portfolio",
   ],
-  authors: [{ name: "Ibrahim Memon" }],
-  creator: "Ibrahim Memon",
-  publisher: "Ibrahim Memon",
+  authors: [{ name: "Lê Trường Lam" }],
+  creator: "Lê Trường Lam",
+  publisher: "Lê Trường Lam",
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://ibiimemon.com",
-    title: "Ibrahim Memon - Software Engineer & UI/UX Designer",
-    description: "A self-taught UI/UX designer and Software Engineer at WebHR. Creating meaningful and delightful digital products.",
-    siteName: "Ibrahim Memon Portfolio",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Ibrahim Memon - Software Engineer & UI/UX Designer",
-    description: "A self-taught UI/UX designer and Software Engineer at WebHR.",
+    locale: "vi_VN",
+    title: "Lê Trường Lam - Frontend Developer",
+    siteName: "Lê Trường Lam Portfolio",
   },
   robots: {
     index: true,
@@ -72,6 +60,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${poppins.variable} font-sans antialiased`}
+        suppressHydrationWarning
       >
         {children}
         <Analytics />
