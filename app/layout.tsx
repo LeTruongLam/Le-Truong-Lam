@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import { LocaleProvider } from "./i18n/LocaleProvider";
 
 import "./globals.css";
 
@@ -62,8 +63,10 @@ export default function RootLayout({
         className={`${poppins.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <Analytics />
+        <LocaleProvider>
+          {children}
+          <Analytics />
+        </LocaleProvider>
       </body>
     </html>
   );

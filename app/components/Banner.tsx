@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useI18n } from "../i18n/LocaleProvider";
 
 export default function Banner(): React.JSX.Element {
-  const texts = ["Frontend Developer"];
+  const { t } = useI18n();
+  const banner = t("banner");
+
+  const texts = [banner.typingRole];
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -14,35 +18,32 @@ export default function Banner(): React.JSX.Element {
     const currentText = texts[currentTextIndex];
 
     if (!isDeleting) {
-      // Typing effect
       if (displayedText.length < currentText.length) {
         const timeout = setTimeout(() => {
           setDisplayedText(currentText.slice(0, displayedText.length + 1));
         }, typingSpeed);
         return () => clearTimeout(timeout);
       } else {
-        // Finished typing, wait before deleting
         const timeout = setTimeout(() => {
           setIsDeleting(true);
-          setTypingSpeed(50); // Faster deletion
+          setTypingSpeed(50);
         }, 2000);
         return () => clearTimeout(timeout);
       }
     } else {
-      // Deleting effect
       if (displayedText.length > 0) {
         const timeout = setTimeout(() => {
           setDisplayedText(currentText.slice(0, displayedText.length - 1));
         }, typingSpeed);
         return () => clearTimeout(timeout);
       } else {
-        // Finished deleting, move to next text
         setIsDeleting(false);
-        setTypingSpeed(100); // Reset typing speed
+        setTypingSpeed(100);
         setCurrentTextIndex((prev) => (prev + 1) % texts.length);
       }
     }
   }, [displayedText, isDeleting, currentTextIndex, texts, typingSpeed]);
+
   return (
     <section
       id="home"
@@ -67,8 +68,10 @@ export default function Banner(): React.JSX.Element {
                   />
                   <div className="relative">
                     <p className="text-white text-lg">
-                      Xin chào! Tôi là{" "}
-                      <span className="text-purple-400">Lê Trường Lam</span>
+                      {banner.helloPrefix}{" "}
+                      <span className="text-purple-400">
+                        {banner.helloNameHighlight}
+                      </span>
                     </p>
                   </div>
                   <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-white/10"></div>
@@ -96,7 +99,7 @@ export default function Banner(): React.JSX.Element {
           </div>
           <div className="flex-1 space-y-6 text-center lg:text-left">
             {/* Desktop: Hello text in original position */}
-            <div className="hidden lg:inline-block relative">
+              <div className="hidden lg:inline-block relative">
               <Image
                 src="/assets/arrow.png"
                 alt="Arrow pointer"
@@ -112,16 +115,18 @@ export default function Banner(): React.JSX.Element {
               />
               <div style={{ bottom: 20, position: "relative" }}>
                 <p className="text-white text-lg">
-                  Xin chào! Tôi là{" "}
-                  <span className="text-purple-400">Lê Trường Lam</span>
+                  {banner.helloPrefix}{" "}
+                  <span className="text-purple-400">
+                    {banner.helloNameHighlight}
+                  </span>
                 </p>
               </div>
               <div className="absolute -bottom-2 left-8 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-white/10"></div>
             </div>
             <div className="">
-              <p className="text-2xl">Frontend life hack: </p>
+              <p className="text-2xl">{banner.lifeHackPrefix}</p>
               <h1 className="text-5xl tracking-tight lg:text-7xl font-semibold text-white leading-tight">
-                Giao diện ấn tượng
+                {banner.mainTitleLine1}
                 <span className="relative inline-block">
                   <Image
                     src="/assets/circle.png"
@@ -131,23 +136,21 @@ export default function Banner(): React.JSX.Element {
                     className="absolute mt-2"
                   />
                   <span className="bg-gradient-to-r from-violet-600 via-violet-400 to-violet-600 bg-clip-text text-transparent">
-                    = code nào cũng được tha thứ.
+                    {banner.mainTitleHighlight}
                   </span>
                 </span>
               </h1>
-              <p className="text-md text-white/80">
-                Vì nếu UI không ấn tượng, còn gì để mà thích nữa?
-              </p>
+              <p className="text-md text-white/80">{banner.subTitle}</p>
             </div>
           </div>
         </div>
         <div className="space-y-3 pt-15 text-center lg:text-left">
           <p className="text-5xl text-white font-bold">
-            I&apos;m a {displayedText}
+            {banner.typingPrefix} {displayedText}
             <span className="animate-pulse">|</span>
           </p>
           <p className="text-lg lg:text-xl text-white/90 tracking-wide flex flex-wrap items-center justify-center lg:justify-start gap-2">
-            <span>Hiện tại, Tôi là 1 Frontend Developer tại</span>
+            <span>{banner.currentJobIntro}</span>
             <span className="flex items-center gap-2">
               <Image
                 src="/assets/webhr.webp"
@@ -157,15 +160,13 @@ export default function Banner(): React.JSX.Element {
                 className="w-5 h-5"
                 style={{ width: "auto", height: "auto" }}
               />
-              <span className="text-blue-400 font-semibold">Sotatek,</span>
+              <span className="text-blue-400 font-semibold">
+                {banner.currentCompanyName}
+              </span>
             </span>
           </p>
           <p className="text-lg text-white/80 max-w-2xl mt-5 mx-auto lg:mx-0">
-            Với 1.5+ năm kinh nghiệm phát triển sản phẩm cho khách hàng Nhật
-            Bản, sử dụng ReactJS, TypeScript để phát triển sản phẩm. <br /> Tôi
-            có khả năng đọc tài liệu thiết kế tiếng Nhật (JLPT N3) <br /> Định
-            hướng phát triển BrSE, tập trung vào vai trò cầu nối kỹ thuật – ngôn
-            ngữ – quy trình giữa khách hàng Nhật Bản và team phát triển.
+            {banner.introParagraph}
           </p>
         </div>
       </div>

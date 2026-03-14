@@ -1,30 +1,24 @@
 "use client";
 import { useState } from "react";
 import Image, { StaticImageData } from "next/image";
+import { useI18n } from "../i18n/LocaleProvider";
 import GEOQUEST from "../../public/assets/geoquest.png";
 import HONDA from "../../public/assets/hondacars.png";
 import SUZUKI from "../../public/assets/suzuki.png";
 import CUP from "../../public/assets/lam-sota.jpg";
 import UGC from "../../public/assets/ugc.png";
 
-interface Project {
+interface ProjectBase {
   id: number;
-  title: string;
-  description?: string;
-  role?: string; // Vai trò
-  technologies?: string[]; // Công nghệ sử dụng
-  achievements?: string[]; // Mô tả thành tựu
-  achievementImages?: (string | StaticImageData)[]; // Ảnh minh họa thành tựu
   image: string | StaticImageData;
+  technologies?: string[];
+  achievementImages?: (string | StaticImageData)[];
   link?: string;
-  teamSize?: string;
 }
 
-const featuredProjects: Project[] = [
+const featuredProjects: ProjectBase[] = [
   {
     id: 1,
-    title: "GeoQuest",
-    role: "Frontend ReactJs Developer",
     technologies: [
       "ReactJS",
       "Redux Toolkit",
@@ -34,22 +28,12 @@ const featuredProjects: Project[] = [
       "Leaflet",
       "...",
     ],
-    achievements: [
-      "Xây dựng và maintenance chức năng hệ thống",
-      "Tích hợp bản đồ và hệ thống nhiệm vụ tương tác",
-      "Tham gia tối ưu hóa hiệu suất hiển thị dữ liệu trên bản đồ",
-    ],
     achievementImages: [CUP, UGC],
-    description:
-      'GeoQuest là một ứng dụng cho phép bạn tích điểm bằng cách chụp ảnh các "nhiệm vụ" quanh thành phố được hiển thị trong ứng dụng. Nhiều địa điểm khác nhau, bao gồm các tòa nhà và bãi đỗ xe trả phí trong thành phố, được hiển thị dưới dạng "nhiệm vụ", và bạn có thể dễ dàng kiếm điểm trong các hoạt động hàng ngày của mình. Số điểm tích lũy được có thể đổi lấy Thẻ quà tặng Amazon, Điểm Rakuten, v.v.',
     link: "https://www.geo-quest.jp/",
     image: GEOQUEST,
-    teamSize: "10~15 người",
   },
   {
     id: 2,
-    title: "【公式】Honda Cars 埼玉北 - 埼玉県のHondaディーラー",
-    role: "Frontend Developer",
     technologies: [
       "Javascript",
       "HTML5",
@@ -58,22 +42,11 @@ const featuredProjects: Project[] = [
       "PHP",
       "...",
     ],
-    achievements: [
-      "Xây dựng giao diện website responsive cho đại lý Honda tại Saitama",
-      "Tích hợp animation và tương tác mượt mà với GSAP",
-      "Tối ưu tốc độ tải trang và trải nghiệm người dùng trên desktop và mobile",
-      "Phối hợp với BE để lấy data từ bên thứ 3 do khách hàng cung cấp",
-    ],
-    teamSize: "3 người",
-    description:
-      "Honda Cars 埼玉北 là đại lý chính hãng của Honda tại khu vực Saitama Bắc (Nhật Bản), chuyên cung cấp dịch vụ toàn diện về ô tô Honda.",
     link: "https://www.hondacars-saitamakita.co.jp/",
     image: HONDA,
   },
   {
     id: 3,
-    title: "Suzuki ISA (Intelligent Speed Assistance) MAP Update Portal",
-    role: "Frontend Developer",
     technologies: [
       "ReactJs",
       "Ant Design",
@@ -82,20 +55,14 @@ const featuredProjects: Project[] = [
       "Đa ngôn ngữ i18n",
       "...",
     ],
-    achievements: [
-      "Xây dựng hệ thống quản lý phiên bản phần mềm và bản đồ cho Suziki",
-      "Thiết kế lại trang chủ nhằm cải thiện trải nghiệm người dùng và hiệu suất hiển thị ",
-      "Hỗ trợ đa ngôn ngữ cho 21 ngước châu Âu",
-    ],
-    teamSize: "3 người",
-    description:
-      "Suzuki ISA Map Update Portal là hệ thống web cho phép người dùng kiểm tra và tải về các phiên bản bản đồ và phần mềm mới nhất phục vụ tính năng Intelligent Speed Assistance (ISA) trên xe Suzuki. Hệ thống hỗ trợ nhiều quốc gia châu Âu và cung cấp chức năng quản lý phiên bản, cập nhật dữ liệu và phân phối bản cập nhật.",
     link: "https://www.globalsuzuki.com/automobile/technology/isa/index.html",
     image: SUZUKI,
   },
 ];
 
 export default function Projects(): React.JSX.Element {
+  const { t } = useI18n();
+  const projectsText = t("projects");
   const [selectedImages, setSelectedImages] = useState<
     (string | StaticImageData)[] | null
   >(null);
@@ -117,37 +84,63 @@ export default function Projects(): React.JSX.Element {
                 <div className="flex">
                   <div className={`${isEven ? "lg:col-start-2" : ""}`}>
                     <p className="text-purple-400 text-lg lg:text-xl mb-2 font-medium">
-                      Dự án nổi bật
+                      {projectsText.featuredLabel}
                     </p>
                     <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-                      {project.title}
+                      {
+                        (projectsText.cards.find(
+                          (c) => c.id === project.id
+                        ) ?? projectsText.cards[0]).title
+                      }
                     </h3>
 
-                    {project.role && (
+                    {projectsText.cards.find((c) => c.id === project.id)
+                      ?.role && (
                       <p className="text-white/70 text-sm mb-2">
-                        <span className="font-medium">Vai trò: </span>
-                        {project.role}
+                        <span className="font-medium">
+                          {projectsText.roleLabel}{" "}
+                        </span>
+                        {
+                          (projectsText.cards.find(
+                            (c) => c.id === project.id
+                          ) ?? projectsText.cards[0]).role
+                        }
                       </p>
                     )}
 
                     {project.technologies && (
                       <p className="text-white/70 text-sm mb-2">
-                        <span className="font-medium">Công nghệ: </span>
+                        <span className="font-medium">
+                          {projectsText.techLabel}{" "}
+                        </span>
                         {project.technologies.join(", ")}
                       </p>
                     )}
-                    {project.teamSize && (
+                    {projectsText.cards.find((c) => c.id === project.id)
+                      ?.teamSize && (
                       <p className="text-white/70 text-sm mb-2">
-                        <span className="font-medium">Quy mô dự án: </span>
-                        {project.teamSize}
+                        <span className="font-medium">
+                          {projectsText.teamSizeLabel}{" "}
+                        </span>
+                        {
+                          (projectsText.cards.find(
+                            (c) => c.id === project.id
+                          ) ?? projectsText.cards[0]).teamSize
+                        }
                       </p>
                     )}
 
-                    {project.achievements &&
-                      project.achievements.length > 0 && (
+                    {projectsText.cards.find((c) => c.id === project.id)
+                      ?.achievements &&
+                      (projectsText.cards.find((c) => c.id === project.id)
+                        ?.achievements?.length ?? 0) > 0 && (
                         <ul className="text-white/60 text-sm mb-4 list-disc list-inside">
-                          {project.achievements.map((item, idx) => (
-                            <li key={idx}>{item}</li>
+                          {(
+                            projectsText.cards.find(
+                              (c) => c.id === project.id
+                            ) ?? projectsText.cards[0]
+                          ).achievements?.map((item) => (
+                            <li key={item}>{item}</li>
                           ))}
                         </ul>
                       )}
@@ -161,12 +154,13 @@ export default function Projects(): React.JSX.Element {
                           }
                           className="mb-4 px-4 py-2  text-white rounded-lg transition border border-white hover:bg-white/10 cursor-pointer"
                         >
-                          Xem thành tựu
+                          {projectsText.viewAchievements}
                         </button>
                       )}
 
                     {/* Description Card */}
-                    {project.description && (
+                    {projectsText.cards.find((c) => c.id === project.id)
+                      ?.description && (
                       <div className="relative z-10 mb-6">
                         <div
                           className={`bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/10 shadow-lg ${
@@ -174,7 +168,11 @@ export default function Projects(): React.JSX.Element {
                           }`}
                         >
                           <p className="text-white/90 text-base lg:text-lg leading-relaxed">
-                            {project.description}
+                            {
+                              (projectsText.cards.find(
+                                (c) => c.id === project.id
+                              ) ?? projectsText.cards[0]).description
+                            }
                           </p>
                         </div>
                       </div>
@@ -216,7 +214,11 @@ export default function Projects(): React.JSX.Element {
                     <div className="relative w-full h-full rounded-lg overflow-hidden">
                       <Image
                         src={project.image}
-                        alt={project.title}
+                        alt={
+                          (projectsText.cards.find(
+                            (c) => c.id === project.id
+                          ) ?? projectsText.cards[0]).title
+                        }
                         fill
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover"

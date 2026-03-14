@@ -2,23 +2,19 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useI18n } from "../i18n/LocaleProvider";
 
 export default function About(): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState("skills");
+  const [activeTab, setActiveTab] = useState<"skills" | "education" | "language">("skills");
+  const { t } = useI18n();
+  const about = t("about");
 
   return (
     <section id="about" className="py-20 px-6">
       <div className="container mx-auto max-w-6xl">
         {/* Intro */}
         <div className="text-center mb-16">
-          <p className="text-2xl max-w-4xl mx-auto">
-            Tôi là Frontend Developer với kinh nghiệm phát triển ứng dụng web
-            bằng ReactJS. Tôi đang tìm kiếm cơ hội gia nhập một{" "}
-            <span className="text-purple-400">công ty outsource Nhật Bản</span>,
-            nơi tôi có thể phát triển sản phẩm cho khách hàng Nhật và nâng cao
-            khả năng <span className="text-purple-400">sử dụng tiếng Nhật</span>
-            .
-          </p>
+          <p className="text-2xl max-w-4xl mx-auto">{about.intro}</p>
         </div>
 
         <Image
@@ -39,7 +35,7 @@ export default function About(): React.JSX.Element {
                 : "border border-white"
             }`}
           >
-            Kỹ năng
+            {about.tabSkills}
           </button>
 
           <button
@@ -50,7 +46,7 @@ export default function About(): React.JSX.Element {
                 : "border border-white"
             }`}
           >
-            Học vấn
+            {about.tabEducation}
           </button>
 
           <button
@@ -61,7 +57,7 @@ export default function About(): React.JSX.Element {
                 : "border border-white"
             }`}
           >
-            Ngoại ngữ
+            {about.tabLanguage}
           </button>
         </div>
 
@@ -69,45 +65,50 @@ export default function About(): React.JSX.Element {
         <div className="max-w-3xl mx-auto text-lg">
           {activeTab === "skills" && (
             <div>
-              <h3 className="text-xl font-bold mb-4">Kỹ năng</h3>
+              <h3 className="text-xl font-bold mb-4">{about.skillsTitle}</h3>
 
-              <p className="font-semibold">🔠 Ngôn ngữ lập trình</p>
-              <p>JavaScript, TypeScript</p>
+              <p className="font-semibold">
+                🔠 {about.skillsProgrammingLabel}
+              </p>
+              <p>{about.programmingLanguages}</p>
 
-              <p className="font-semibold mt-4">💻 Frontend</p>
+              <p className="font-semibold mt-4">💻 {about.frontendTitle}</p>
               <ul className="list-disc ml-6">
-                <li>ReactJS, Next.js, Redux Toolkit, TanStack Query</li>
-                <li>HTML5, CSS3, TailwindCSS, Sass</li>
-                <li>SEO, Responsive Design</li>
+                {about.frontendItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
 
-              {/* <p className="font-semibold mt-4">💻 Backend / Other</p>
-              <p>NestJS (basic – REST API, authentication cơ bản)</p> */}
-
-              <p className="font-semibold mt-4">🔨 Công cụ</p>
-              <p>Git, GitHub, GitLab, Jira, Backlog, Postman, Figma, VS Code</p>
+              <p className="font-semibold mt-4">🔨 {about.toolsTitle}</p>
+              <ul className="list-disc ml-6">
+                {about.toolsItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
           )}
 
           {activeTab === "education" && (
             <div>
-              <h3 className="text-xl font-bold mb-4">Học vấn</h3>
+              <h3 className="text-xl font-bold mb-4">
+                {about.educationTitle}
+              </h3>
               <p className="font-semibold">
-                Đại học Bách Khoa Hà Nội – Trường CNTT & Truyền Thông
+                {about.educationSchool}
               </p>
-              <p>Khoa Công nghệ Thông tin Việt Nhật – K65</p>
-              <p>Cử nhân Công nghệ Thông tin (2020 – 2024)</p>
-              <p>CPA: 3.1 / 4.0</p>
+              <p>{about.educationMajor}</p>
+              <p>{about.educationTime}</p>
+              <p>{about.educationGpa}</p>
             </div>
           )}
 
           {activeTab === "language" && (
             <div>
-              <h3 className="text-xl font-bold mb-4">Ngoại ngữ</h3>
+              <h3 className="text-xl font-bold mb-4">{about.languageTitle}</h3>
               <ul className="list-disc ml-6">
-                <li>JLPT N3</li>
-                <li>Đã hoàn thành khóa học N2 tại Dũng Mori</li>
-                <li>Đọc hiểu tài liệu kỹ thuật tiếng Nhật</li>
+                {about.languageItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
             </div>
           )}
